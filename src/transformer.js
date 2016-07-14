@@ -116,8 +116,11 @@ function placeholderReplace(item, index) {
 
 // filter empty tag
 function filterEmpty(item, index) {
+  if (item === '') {
+    this.splice(index, 1);
+  }
   if (Array.isArray(item)) {
-    if (item[0] === '') {
+    if (item.length === 0 || item[0] === '') {
       this.splice(index, 1);
     } else {
       item.forEach(filterEmpty.bind(item));
