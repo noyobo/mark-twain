@@ -83,6 +83,8 @@ function transformer(node, index) {
       ];
     case 'blockquote':
       return ['blockquote'].concat(transformedChildren);
+    case 'break':
+      return ['br'];
     case 'thematicBreak':
       return ['hr'];
     case 'html':
