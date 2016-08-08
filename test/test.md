@@ -15,6 +15,10 @@ description: a sample Markdown for test
 1. Second
 1. Third
 
+[![build status][ci-image]][ci-url]
+
+[ci-image]: http://npmjs.org/task/378711/status.svg
+[ci-url]: http://npmjs.org/task/378711
 
 * Something
 * [Something](www.something.com)
