@@ -3,6 +3,7 @@
 const JsonML = require('jsonml.js/lib/dom');
 
 let isTHead = false;
+let definitionMap = {};
 
 function transformTHead(node) {
   const transformedNode = transformer(node);
@@ -95,13 +96,22 @@ function transformer(node, index) {
       }
       return htmlMT;
     case 'linkReference':
-      return `[${node.identifier}]`;
+      return ['a', {
+        href: `reference#${node.identifier}`,
+      }].concat(transformedChildren);
+    case 'imageReference':
+      return ['img', {
+        src: `reference#${node.identifier}`,
+        title: node.alt,
+        alt: node.alt,
+      }];
     default:
       return node;
   }
 }
 
 let placeholderParent;
+let definitionRegex = /reference#([^\]]+)/;
 // replace __tag_content_placeholder__
 function placeholderReplace(item, index) {
   if (Array.isArray(item)) {
@@ -113,6 +123,14 @@ function placeholderReplace(item, index) {
   } else if (item === '__tag_content_placeholder__') {
     placeholderParent = this;
     this.splice(index, 1);
+  } else if (definitionRegex.test(item.href)) {
+    item.href = item.href.replace(definitionRegex, function(str, ref) {
+      return definitionMap[ref] && definitionMap[ref].url;
+    });
+  } else if (definitionRegex.test(item.src)) {
+    item.src = item.src.replace(definitionRegex, function(str, ref) {
+      return definitionMap[ref] && definitionMap[ref].url;
+    });
   }
 }
 
@@ -130,8 +148,21 @@ function filterEmpty(item, index) {
   }
 }
 
+function filterDefinition(item) {
+  if (item && item.type === 'definition') {
+    definitionMap[item.identifier] = {
+      title: item.title,
+      url: item.url,
+    };
+    return false;
+  }
+  return true;
+}
+
 module.exports = function(ast) {
   let markdownData = transformer(ast);
+
+  markdownData = markdownData.filter(filterDefinition);
   markdownData.forEach(placeholderReplace.bind(markdownData));
   markdownData.forEach(filterEmpty.bind(markdownData));
   return markdownData;
