@@ -1,6 +1,6 @@
 {
-  "name": "@ali/mark-twain-ice",
-  "version": "1.1.4",
+  "name": "mark-twain",
+  "version": "1.1.6",
   "description": "Parse Markdown into JsonML.",
   "main": "index.js",
   "scripts": {
@@ -15,6 +15,13 @@
     "jsonml"
   ],
   "author": "Benjy Cui <benjytrys@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benjycui/mark-twain"
+  },
+  "bugs": {
+    "url": "https://github.com/benjycui/mark-twain/issues"
+  },
   "license": "MIT",
   "dependencies": {
     "jsonml.js": "^0.1.0",
@@ -25,8 +32,5 @@
     "eslint": "^2.7.0",
     "eslint-config-egg": "^2.0.0",
     "mocha": "^2.4.5"
-  },
-  "publishConfig": {
-    "registry": "http://registry.npm.alibaba-inc.com"
   }
 }
